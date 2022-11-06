@@ -1,5 +1,5 @@
-import {useEffect} from 'react';
-import { ActivityIndicator, FlatList, View} from 'react-native';
+import {react, useEffect} from 'react';
+import {ActivityIndicator, RefreshControl, FlatList, View, Text} from 'react-native';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
 import {Dimensions} from 'react-native';
@@ -83,6 +83,8 @@ const Movies = () => {
         </Loader>
     ) : (
         <FlatList
+            onRefresh={onRefresh}
+            refreshing={refreshing}
             ListHeaderComponent={<>
                 <Swiper
                     horizontal
