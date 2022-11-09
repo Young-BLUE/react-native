@@ -48,6 +48,7 @@ const Movies = () => {
     const {isLoading: nowPlayingLoading, data: nowPlayingData} = useQuery("nowPlaying", moviesAPI.nowPlaying);
     const {isLoading: upComingLoading, data: upComingData} = useQuery("upComing", moviesAPI.upcoming);
     const {isLoading: trendingLoading, data: trendingData} = useQuery("trending", moviesAPI.trending);
+    // react-query를 사용하면 queryKey를 통해 caching 되어 다른 탭으로 나갔다 와도 다시 fetch를 하지 않는다
 
     const renderVMedia = ({item}) => (
         <VMedia
