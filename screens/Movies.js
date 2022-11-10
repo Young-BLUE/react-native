@@ -7,7 +7,7 @@ import {useState} from 'react';
 import Slide from '../components/Slides';
 import HMedia from "../components/HMedia";
 import VMedia from "../components/VMedia";
-import {useQuery} from "react-query";
+import {useQuery, useQueryClient} from "react-query";
 import {moviesAPI} from "../api";
 
 const Loader = styled.View`
@@ -44,10 +44,22 @@ const HSeparator = styled.View`
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 const Movies = () => {
-    const [refreshing, setRefreshing] = useState(false);
-    const {isLoading: nowPlayingLoading, data: nowPlayingData} = useQuery("nowPlaying", moviesAPI.nowPlaying);
-    const {isLoading: upComingLoading, data: upComingData} = useQuery("upComing", moviesAPI.upcoming);
-    const {isLoading: trendingLoading, data: trendingData} = useQuery("trending", moviesAPI.trending);
+    const queryClient = useQueryClient();
+    const {
+        isLoading: nowPlayingLoading,
+        data: nowPlayingData,
+        isRefetching: isRefetchingNowPlaying
+    } = useQuery(["movies","nowPlaying"], moviesAPI.nowPlaying);
+    const {
+        isLoading: upComingLoading,
+        data: upComingData,
+        isRefetching: isRefetchingUpcoming
+    } = useQuery(["movies","upComing"], moviesAPI.upcoming);
+    const {
+        isLoading: trendingLoading,
+        data: trendingData,
+        isRefetching: isRefetchingTrending
+    } = useQuery(["movies","trending"], moviesAPI.trending);
     // react-query를 사용하면 queryKey를 통해 caching 되어 다른 탭으로 나갔다 와도 다시 fetch를 하지 않는다
 
     const renderVMedia = ({item}) => (
@@ -69,8 +81,11 @@ const Movies = () => {
     );
 
     const MovieKeyExtractor = (item) => item.id + ""
-    const onRefresh = async () => {};
+    const onRefresh = async () => {
+        queryClient.refetchQueries(["movies"]);
+    };
     const loading = nowPlayingLoading || upComingLoading || trendingLoading;
+    const refreshing = isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
     return loading ? (
         <Loader>

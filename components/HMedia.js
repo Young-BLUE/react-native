@@ -33,7 +33,6 @@ const Release = styled.Text`
 `;
 
 const HMedia = ({id, poster_path, original_title, release_date, overview, vote_average}) => {
-    console.log(poster_path)
     return (
         <HMovie key={id}>
             <Poster path={poster_path}/>
