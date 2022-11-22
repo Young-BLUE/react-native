@@ -1,20 +1,13 @@
-import {react, useEffect} from 'react';
 import {ActivityIndicator, RefreshControl, FlatList, View, Text} from 'react-native';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
 import {Dimensions} from 'react-native';
-import {useState} from 'react';
 import Slide from '../components/Slides';
 import HMedia from "../components/HMedia";
 import VMedia from "../components/VMedia";
 import {useQuery, useQueryClient} from "react-query";
 import {moviesAPI} from "../api";
-
-const Loader = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import Loader from "../components/Loader";
 
 const ListTitle = styled.Text`
   color: white;
@@ -88,9 +81,7 @@ const Movies = () => {
     const refreshing = isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
     return loading ? (
-        <Loader>
-            <ActivityIndicator size="large"/>
-        </Loader>
+        <Loader />
     ) : (
         <FlatList
             onRefresh={onRefresh}
