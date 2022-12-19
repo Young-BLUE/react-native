@@ -15,6 +15,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { moviesAPI } from "../api";
 import Loader from "../components/Loader";
 import HList from "../components/HList";
+import {useState} from "react";
 
 const ListTitle = styled.Text`
   color: white;
@@ -44,20 +45,18 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movies = () => {
   const queryClient = useQueryClient();
+  const [refreshing, setRefreshing] = useState(false);
   const {
     isLoading: nowPlayingLoading,
     data: nowPlayingData,
-    isRefetching: isRefetchingNowPlaying,
   } = useQuery(["movies", "nowPlaying"], moviesAPI.nowPlaying);
   const {
     isLoading: upComingLoading,
     data: upComingData,
-    isRefetching: isRefetchingUpcoming,
   } = useQuery(["movies", "upComing"], moviesAPI.upcoming);
   const {
     isLoading: trendingLoading,
     data: trendingData,
-    isRefetching: isRefetchingTrending,
   } = useQuery(["movies", "trending"], moviesAPI.trending);
   // react-query를 사용하면 queryKey를 통해 caching 되어 다른 탭으로 나갔다 와도 다시 fetch를 하지 않는다
 
@@ -82,11 +81,11 @@ const Movies = () => {
 
   const MovieKeyExtractor = (item) => item.id + "";
   const onRefresh = async () => {
-    queryClient.refetchQueries(["movies"]);
+    setRefreshing(true);
+    await queryClient.refetchQueries(["movies"]);
+    setRefreshing(false);
   };
   const loading = nowPlayingLoading || upComingLoading || trendingLoading;
-  const refreshing =
-    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
 
   return loading ? (
     <Loader />
