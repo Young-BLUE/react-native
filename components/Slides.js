@@ -1,10 +1,11 @@
-import { BlurView } from 'expo-blur';
-import { StyleSheet } from 'react-native';
+import {BlurView} from 'expo-blur';
+import {StyleSheet, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import React from 'react';
 import useColorScheme from 'react-native/Libraries/Utilities/useColorScheme';
 import styled from 'styled-components/native';
-import { makeImagePath } from '../Utils';
+import {makeImagePath} from '../Utils';
 import Poster from './Poster';
+import {useNavigation} from "@react-navigation/native";
 
 const View = styled.View`
   flex: 1;
@@ -37,7 +38,7 @@ const Title = styled.Text`
 const Overview = styled.Text`
   margin-top: 10px;
   color: ${(props) =>
-    props.isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)'};
+          props.isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)'};
 `;
 
 const Votes = styled(Overview)`
@@ -45,37 +46,43 @@ const Votes = styled(Overview)`
 `;
 
 const Slide = ({
-  backdrop_path,
-  poster_path,
-  original_title,
-  vote_average,
-  overview,
-}) => {
-  const isDark = useColorScheme() === 'dark';
-  return (
-    <View style={{ flex: 1 }}>
-      <BgImg
-        style={StyleSheet.absoluteFill}
-        source={{ uri: makeImagePath(backdrop_path, 'w500') }}
-      />
-      <BlurView
-        tint={isDark ? 'dark' : 'light'}
-        intensity={50}
-        style={StyleSheet.absoluteFill}
-      >
-        <Wrapper>
-          <Poster path={poster_path} />
-          <Column>
-            <Title isDark={isDark}>{original_title}</Title>
-            {vote_average > 0 ? (
-              <Votes isDark={isDark}>⭐️{vote_average}/10</Votes>
-            ) : null}
-            <Overview isDark={isDark}>{overview.slice(0, 80)}...</Overview>
-          </Column>
-        </Wrapper>
-      </BlurView>
-    </View>
-  );
+                   backdrop_path,
+                   poster_path,
+                   original_title,
+                   vote_average,
+                   overview,
+               }) => {
+    const isDark = useColorScheme() === 'dark';
+    const navigation = useNavigation();
+    const goToDetail = () => {
+        navigation.navigate("Stack", {screen: "Detail"});
+    }
+    return (
+        <TouchableWithoutFeedback onPress={goToDetail}>
+            <View style={{flex: 1}}>
+                <BgImg
+                    style={StyleSheet.absoluteFill}
+                    source={{uri: makeImagePath(backdrop_path, 'w500')}}
+                />
+                <BlurView
+                    tint={isDark ? 'dark' : 'light'}
+                    intensity={50}
+                    style={StyleSheet.absoluteFill}
+                >
+                    <Wrapper>
+                        <Poster path={poster_path}/>
+                        <Column>
+                            <Title isDark={isDark}>{original_title}</Title>
+                            {vote_average > 0 ? (
+                                <Votes isDark={isDark}>⭐️{vote_average}/10</Votes>
+                            ) : null}
+                            <Overview isDark={isDark}>{overview.slice(0, 80)}...</Overview>
+                        </Column>
+                    </Wrapper>
+                </BlurView>
+            </View>
+        </TouchableWithoutFeedback>
+    );
 };
 
 export default Slide;
