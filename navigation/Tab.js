@@ -7,6 +7,7 @@ import Search from '../screens/Search';
 import { useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Stack from './Stack';
+import {BLACK_COLOR, DARK_GREY, LIGHT_GREY, WHITE_COLOR, YELLOW_COLOR} from "../colors";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,19 +17,19 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       sceneContainerStyle={{
-        backgroundColor: isDark ? '#1e272e' : 'white',
+        backgroundColor: isDark ? BLACK_COLOR : WHITE_COLOR,
       }}
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: isDark ? '#1e272e' : 'white',
+          backgroundColor: isDark ? BLACK_COLOR : WHITE_COLOR,
         },
-        tabBarActiveTintColor: isDark ? '#d97e00' : '#d97e00',
-        tabBarInactiveTintColor: isDark ? 'white' : 'lightgray',
+        tabBarActiveTintColor: isDark ? YELLOW_COLOR : BLACK_COLOR,
+        tabBarInactiveTintColor: isDark ? DARK_GREY : LIGHT_GREY,
         headerStyle: {
-          backgroundColor: isDark ? '#1e272e' : 'white',
+          backgroundColor: isDark ? BLACK_COLOR : WHITE_COLOR,
         },
         headerTitleStyle: {
-          color: isDark ? 'white' : '#1e272e',
+          color: isDark ? WHITE_COLOR : BLACK_COLOR,
         },
         tabBarLabelStyle: {
           marginTop: -5,

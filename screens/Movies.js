@@ -62,8 +62,8 @@ const Movies = () => {
 
   const renderVMedia = ({ item }) => (
     <VMedia
-      poster_path={item.poster_path}
-      original_title={item.original_title}
+      posterPath={item.poster_path}
+      originalTitle={item.original_title}
       votes={item.vote_average}
     />
   );
@@ -71,9 +71,9 @@ const Movies = () => {
   const renderHMedia = ({ item }) => (
     <HMedia
       id={item.id}
-      poster_path={item.poster_path}
-      original_title={item.original_title}
-      release_date={item.release_date}
+      posterPath={item.poster_path}
+      originalTitle={item.original_title}
+      releaseDate={item.release_date}
       overview={item.overview}
       vote={item.vote_average}
     />
@@ -112,10 +112,10 @@ const Movies = () => {
             {nowPlayingData.results.map((movie) => (
               <Slide
                 key={movie.id}
-                backdrop_path={movie.backdrop_path}
-                poster_path={movie.poster_path}
-                original_title={movie.original_title}
-                vote_average={movie.vote_average}
+                backdropPath={movie.backdrop_path}
+                posterPath={movie.poster_path}
+                originalTitle={movie.original_title}
+                voteAverage={movie.vote_average}
                 overview={movie.overview}
               />
             ))}

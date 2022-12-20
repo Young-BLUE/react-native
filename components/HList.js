@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import {FlatList} from "react-native";
 import styled from "styled-components/native";
 import VMedia from "./VMedia";
 
@@ -19,27 +19,27 @@ export const HListSeparator = styled.View`
   width: 20px;
 `;
 
-const HList = ({ title, data }) => {
-  return (
-    <ListContainer>
-      <ListTitle>{title}</ListTitle>
-      <FlatList
-        data={data}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 30 }}
-        ItemSeparatorComponent={HListSeparator}
-        keyExtractor={(item) => item.id + ""}
-        renderItem={({ item }) => (
-          <VMedia
-            poster_path={item.poster_path}
-            original_title={item.original_title ?? item.original_name}
-            votes={item.vote_average}
-          />
-        )}
-      />
-    </ListContainer>
-  );
+const HList = ({title, data}) => {
+    return (
+        <ListContainer>
+            <ListTitle>{title}</ListTitle>
+            <FlatList
+                data={data}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{paddingHorizontal: 30}}
+                ItemSeparatorComponent={HListSeparator}
+                keyExtractor={(item) => item.id + ""}
+                renderItem={({item}) => (
+                    <VMedia
+                        posterPath={item.poster_path}
+                        originalTitle={item.original_title ?? item.original_name}
+                        votes={item.vote_average}
+                    />
+                )}
+            />
+        </ListContainer>
+    );
 };
 
 export default HList;

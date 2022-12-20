@@ -34,27 +34,31 @@ const Release = styled.Text`
   margin-vertical: 5px;
 `;
 
-const HMedia = ({id, poster_path, original_title, release_date, overview, vote_average}) => {
+const HMedia = ({id, posterPath, originalTitle, releaseDate, overview, voteAverage}) => {
     const navigation = useNavigation();
     const goToDetail = () => {
-        navigation.navigate("Stack", {screen: "Detail"});
+        navigation.navigate("Stack", {
+            screen: "Detail", params: {
+                originalTitle,
+            }
+        });
     }
     return (
         <TouchableOpacity onPress={goToDetail}>
             <HMovie key={id}>
-                <Poster path={poster_path}/>
+                <Poster path={posterPath}/>
                 <HColumn>
                     <Title>
-                        {original_title.length > 30
-                            ? `${original_title.slice(0, 30)}...`
-                            : original_title}
+                        {originalTitle.length > 30
+                            ? `${originalTitle.slice(0, 30)}...`
+                            : originalTitle}
                     </Title>
-                    {release_date ? (
+                    {releaseDate ? (
                         <Release>
-                            {new Date(release_date).toLocaleDateString("ko")}
+                            {new Date(releaseDate).toLocaleDateString("ko")}
                         </Release>
                     ) : null}
-                    {vote_average ? <Votes vote_average={vote_average}/> : null}
+                    {voteAverage ? <Votes vote_average={voteAverage}/> : null}
                     <Overview>
                         {overview !== "" && overview.length > 150
                             ? `${overview.slice(0, 150)}...`

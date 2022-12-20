@@ -16,18 +16,22 @@ const Title = styled.Text`
   margin-bottom: 5px;
 `;
 
-const VMedia = ({id, poster_path, original_title, votes}) => {
+const VMedia = ({id, posterPath, originalTitle, votes}) => {
     const navigation = useNavigation();
     const goToDetail = () => {
-        navigation.navigate("Stack", {screen: "Detail"});
+        navigation.navigate("Stack", {
+            screen: "Detail", params: {
+                originalTitle,
+            }
+        });
     }
     return (
         <TouchableOpacity onPress={goToDetail}>
             <Movie key={id}>
-                <Poster path={poster_path}/>
+                <Poster path={posterPath}/>
                 <Title>
-                    {original_title.slice(0, 13)}
-                    {original_title.length > 13 ? '...' : null}
+                    {originalTitle.slice(0, 13)}
+                    {originalTitle.length > 13 ? '...' : null}
                 </Title>
                 <Votes vote={votes}></Votes>
             </Movie>
