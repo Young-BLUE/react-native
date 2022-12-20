@@ -5,7 +5,7 @@ import Votes from "./Votes";
 import {useNavigation} from "@react-navigation/native";
 import {TouchableOpacity} from "react-native";
 
-const Movie = styled.View`
+const Container = styled.View`
   align-items: center;
 `;
 
@@ -16,25 +16,25 @@ const Title = styled.Text`
   margin-bottom: 5px;
 `;
 
-const VMedia = ({id, posterPath, originalTitle, votes}) => {
+const VMedia = ({id, posterPath, originalTitle, votes, fullData}) => {
     const navigation = useNavigation();
     const goToDetail = () => {
         navigation.navigate("Stack", {
             screen: "Detail", params: {
-                originalTitle,
+                ...fullData,
             }
         });
     }
     return (
         <TouchableOpacity onPress={goToDetail}>
-            <Movie key={id}>
+            <Container key={id}>
                 <Poster path={posterPath}/>
                 <Title>
                     {originalTitle.slice(0, 13)}
                     {originalTitle.length > 13 ? '...' : null}
                 </Title>
                 <Votes vote={votes}></Votes>
-            </Movie>
+            </Container>
         </TouchableOpacity>
 
     )

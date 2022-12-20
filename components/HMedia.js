@@ -34,12 +34,12 @@ const Release = styled.Text`
   margin-vertical: 5px;
 `;
 
-const HMedia = ({id, posterPath, originalTitle, releaseDate, overview, voteAverage}) => {
+const HMedia = ({id, posterPath, originalTitle, releaseDate, overview, voteAverage, fullData}) => {
     const navigation = useNavigation();
     const goToDetail = () => {
         navigation.navigate("Stack", {
             screen: "Detail", params: {
-                originalTitle,
+                ...fullData,
             }
         });
     }

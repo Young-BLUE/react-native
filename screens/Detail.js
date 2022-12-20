@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import styled from "styled-components/native";
 import {Text, View} from "react-native";
+import Poster from "../components/Poster";
 
 const Container = styled.ScrollView`
   background-color: ${props => props.theme.mainBgColor};
@@ -8,17 +9,17 @@ const Container = styled.ScrollView`
 
 const Detail = ({
                     navigation: {setOptions},
-                    route: {params: {originalTitle}}
+                    route: {params,}
                 }) => {
     useEffect(() => {
         setOptions({
-            title: originalTitle,
+            title: 'original_title' in params ? params.original_title : params.original_name,
         })
-    },[])
+    }, [])
     return (
         <Container>
-        <Text>{originalTitle}</Text>
-    </Container>
+            <Poster path={params.poster_path || ''} />
+        </Container>
     )
 }
 
