@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {RefreshControl, ScrollView} from "react-native";
 import {useQuery, useQueryClient} from "react-query";
-import {tvApi} from "../api";
+import {tvAPI} from "../api";
 import HList from "../components/HList";
 import Loader from "../components/Loader";
 
@@ -11,15 +11,15 @@ const Tv = () => {
     const {
         isLoading: todayLoading,
         data: todayData,
-    } = useQuery(["tv", "today"], tvApi.airingToday);
+    } = useQuery(["tv", "today"], tvAPI.airingToday);
     const {
         isLoading: topLoading,
         data: topData,
-    } = useQuery(["tv", "top"], tvApi.topRated);
+    } = useQuery(["tv", "top"], tvAPI.topRated);
     const {
         isLoading: trendingLoading,
         data: trendingData,
-    } = useQuery(["tv", "trending"], tvApi.trending);
+    } = useQuery(["tv", "trending"], tvAPI.trending);
 
     const onRefresh = async () => {
         setRefreshing(true);

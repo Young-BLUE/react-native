@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import {useState} from "react";
 import {useQuery} from "react-query";
-import {moviesAPI, tvApi} from "../api";
+import {moviesAPI, tvAPI} from "../api";
 import Loader from "../components/Loader";
 import HList from "../components/HList";
 
@@ -28,7 +28,7 @@ const Search = () => {
     });
     const {isLoading: tvLoading, data: tvData, refetch: searchTv} = useQuery(
         ["searchTv", query],
-        tvApi.search, {
+        tvAPI.search, {
             enabled: false,
         });
     const onChangeText = (text) => {
