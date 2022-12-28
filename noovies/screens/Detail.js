@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import { Dimensions, Linking, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Linking,
+  Platform,
+  Share,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import Poster from "../components/Poster";
 import { makeImagePath } from "../Utils";
 import { LinearGradient } from "expo-linear-gradient";
 import { BLACK_COLOR } from "../colors";
 import { useQuery } from "react-query";
 import { moviesAPI, tvAPI } from "../api";
-import { isLoading } from "expo-font";
 import Loader from "../components/Loader";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -58,6 +64,31 @@ const BtnText = styled.Text`
 `;
 
 const Detail = ({ navigation: { setOptions }, route: { params } }) => {
+  const ShareMedia = async () => {
+    const isAndroid = Platform.OS === "android";
+    const homepage = isMovie
+      ? `https://www.imdb.com/title/${data.imdb_id}`
+      : data.homepage;
+    if (isAndroid) {
+      await Share.share({
+        url: isMovie
+          ? `https://www.imdb.com/title/${data.imdb_id}`
+          : data.homepage,
+        title: isMovie ? params.original_title : params.original_name,
+        message: `${params.overview}\nCheck it out: ${homepage}`,
+      });
+    } else {
+      await Share.share({
+        url: homepage,
+        title: isMovie ? params.original_title : params.original_name,
+      });
+    }
+  };
+  const ShareButton = () => (
+    <TouchableOpacity onPress={ShareMedia}>
+      <Ionicons name={"share-outline"} color={"white"} size={24} />
+    </TouchableOpacity>
+  );
   const isMovie = "original_title" in params;
   const { isLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
@@ -68,6 +99,15 @@ const Detail = ({ navigation: { setOptions }, route: { params } }) => {
       title: isMovie ? "Movie" : "TV Show",
     });
   }, []);
+
+  // Header 는 re-rendering 되지 않기 때문에 rendering 시점에 데이터가 있는 상태여야함
+  useEffect(() => {
+    if (data) {
+      setOptions({
+        headerRight: () => <ShareButton />,
+      });
+    }
+  }, [data]);
   const openYoutubeLink = async (videoId) => {
     const baseUrl = `https://m.youtube.com/watch?v=${videoId}`;
     await Linking.openURL(baseUrl);
