@@ -84,11 +84,6 @@ const Detail = ({ navigation: { setOptions }, route: { params } }) => {
       });
     }
   };
-  const ShareButton = () => (
-    <TouchableOpacity onPress={ShareMedia}>
-      <Ionicons name={"share-outline"} color={"white"} size={24} />
-    </TouchableOpacity>
-  );
   const isMovie = "original_title" in params;
   const { isLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
@@ -104,7 +99,11 @@ const Detail = ({ navigation: { setOptions }, route: { params } }) => {
   useEffect(() => {
     if (data) {
       setOptions({
-        headerRight: () => <ShareButton />,
+        headerRight: () => (
+          <TouchableOpacity onPress={ShareMedia}>
+            <Ionicons name={"share-outline"} color={"white"} size={24} />
+          </TouchableOpacity>
+        ),
       });
     }
   }, [data]);
