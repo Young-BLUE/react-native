@@ -50,23 +50,22 @@ const Movies = () => {
     ["movies", "nowPlaying"],
     moviesAPI.nowPlaying
   );
-  const { isLoading: upComingLoading, data: upComingData } = useInfiniteQuery(
-    ["movies", "upComing"],
-    moviesAPI.upcoming
-  );
+  const {
+    isLoading: upComingLoading,
+    data: upComingData,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(["movies", "upComing"], moviesAPI.upcoming, {
+    getNextPageParam: (currentPage) => {
+      const nextPage = currentPage.page + 1;
+      return nextPage > currentPage.total_pages ? null : nextPage;
+    },
+  });
   const { isLoading: trendingLoading, data: trendingData } = useQuery(
     ["movies", "trending"],
     moviesAPI.trending
   );
   // react-query를 사용하면 queryKey를 통해 caching 되어 다른 탭으로 나갔다 와도 다시 fetch를 하지 않는다
-
-  const renderVMedia = ({ item }) => (
-    <VMedia
-      posterPath={item.poster_path}
-      originalTitle={item.original_title}
-      votes={item.vote_average}
-    />
-  );
 
   const renderHMedia = ({ item }) => (
     <HMedia
@@ -88,7 +87,9 @@ const Movies = () => {
   };
   const loading = nowPlayingLoading || upComingLoading || trendingLoading;
   const loadMore = () => {
-    alert("loadMore");
+    if (hasNextPage) {
+      fetchNextPage();
+    }
   };
 
   return loading ? (
