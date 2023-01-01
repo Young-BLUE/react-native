@@ -11,11 +11,11 @@ import { Dimensions } from "react-native";
 import Slide from "../components/Slides";
 import HMedia from "../components/HMedia";
 import VMedia from "../components/VMedia";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
 import { moviesAPI } from "../api";
 import Loader from "../components/Loader";
 import HList from "../components/HList";
-import {useState} from "react";
+import { useState } from "react";
 
 const ListTitle = styled.Text`
   color: white;
@@ -46,18 +46,18 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const Movies = () => {
   const queryClient = useQueryClient();
   const [refreshing, setRefreshing] = useState(false);
-  const {
-    isLoading: nowPlayingLoading,
-    data: nowPlayingData,
-  } = useQuery(["movies", "nowPlaying"], moviesAPI.nowPlaying);
-  const {
-    isLoading: upComingLoading,
-    data: upComingData,
-  } = useQuery(["movies", "upComing"], moviesAPI.upcoming);
-  const {
-    isLoading: trendingLoading,
-    data: trendingData,
-  } = useQuery(["movies", "trending"], moviesAPI.trending);
+  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
+    ["movies", "nowPlaying"],
+    moviesAPI.nowPlaying
+  );
+  const { isLoading: upComingLoading, data: upComingData } = useInfiniteQuery(
+    ["movies", "upComing"],
+    moviesAPI.upcoming
+  );
+  const { isLoading: trendingLoading, data: trendingData } = useQuery(
+    ["movies", "trending"],
+    moviesAPI.trending
+  );
   // react-query를 사용하면 queryKey를 통해 caching 되어 다른 탭으로 나갔다 와도 다시 fetch를 하지 않는다
 
   const renderVMedia = ({ item }) => (
@@ -87,11 +87,16 @@ const Movies = () => {
     setRefreshing(false);
   };
   const loading = nowPlayingLoading || upComingLoading || trendingLoading;
+  const loadMore = () => {
+    alert("loadMore");
+  };
 
   return loading ? (
     <Loader />
   ) : (
     <FlatList
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.8}
       onRefresh={onRefresh}
       refreshing={refreshing}
       ListHeaderComponent={
@@ -126,7 +131,7 @@ const Movies = () => {
           <ComingSoonTitle>Coming Soon</ComingSoonTitle>
         </>
       }
-      data={upComingData.results}
+      data={upComingData.pages.map((page) => page.results).flat()}
       keyExtractor={MovieKeyExtractor}
       ItemSeparatorComponent={HSeparator}
       renderItem={renderHMedia}
